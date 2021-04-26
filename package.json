@@ -12,7 +12,7 @@
   },
   "keywords": [],
   "author": "Christian van Os, Caslay Oort, Mark Ernst",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/christianvanos/sweng-linq-to-sql/issues"
   },
