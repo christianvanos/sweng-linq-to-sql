@@ -1,3 +1,19 @@
-const getHelloWorld = (): string => 'Hello world!';
+/*
+	STUDENTS Table: 
+	- Name:string
+	- Surname: string
+	
+	GRADES Table:
+	- Grade: number
+	- CourseId: number
 
-console.log(getHelloWorld());
+	COURSES Table: 
+	- Name: string
+	- StudyPoints: number
+	
+	LECTURES Table:
+	- Title: string
+	- Topic: string
+*/
+
+
