@@ -1,0 +1,5 @@
+/*
+
+This function does select certain properties from the input variabele.
+
+*/
