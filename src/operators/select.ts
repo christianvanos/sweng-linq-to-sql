@@ -27,3 +27,13 @@ will produce a compiler error, because Address is not a valid field in the type 
 We expect this code to make use of the keyof type operator, the type homomorphism, and in general the advanced types of TypeScript. This implies that the code above will have type
 
 */
+
+import { ListType, CustomList } from '../utils/List';
+
+const Select = <a, b>(obj: ListType<a>, args: string[]): ListType<b> => {
+	// eslint-disable-next-line no-console
+	console.log(args);
+	return CustomList<b>([]);
+}
+
+export default Select;

@@ -30,3 +30,10 @@ We expect this code to make use of the keyof type operator, the type homomorphis
 
 */
 
+import { ListType, CustomList } from '../utils/List';
+
+const Include = <a, b, c>(obj: ListType<a>, l: ListType<b>): ListType<c> => {
+	return CustomList<c>([]);
+}
+
+export default Include;
