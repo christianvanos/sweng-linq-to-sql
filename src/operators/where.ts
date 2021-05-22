@@ -1,6 +1,5 @@
 /*
+Function: Where
 
-This function returns a the filtered output using the input and an input expression.
-
+Where filters on a property and a value using a operator (eq,gt,lt) and returns the entries based on specific values.
 */
-

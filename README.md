@@ -1,10 +1,9 @@
-# Software Engineering Minor project 2
+# Type-Safe-Linq
+In this project, you will build your own version of a LINQ-style ORM in TypeScript with full-blown type-safety, and its translation into procedures over objects in memory.
 
-## mini typesafe LINQ to SQL
+https://github.com/hogeschool/Software-Engineering-Minor/blob/master/Projects/project2%20-%20mini%20typesafe%20LINQ%20to%20SQL.md
 
-How to run:
-
-- Run `tsc` in terminal;
-- Open the `index.html` with live-server extension;
-- Open the console in the browser where the live-server is spawned;
-- This is the place where your `console.log` end up;
+# Created by:
+- Mark Ernst (//TODO: STUDENTNUMBER)
+- Caslay Oort (0970621)
+- Christian van Os (//TODO: STUDENTNUMBER)
