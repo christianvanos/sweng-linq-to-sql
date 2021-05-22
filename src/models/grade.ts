@@ -8,4 +8,6 @@ export interface Grade {
 export const Grade = (grade: number, courseId: number ): Grade => ({
 	grade,
 	courseId
-})
+});
+
+export default Grade;
