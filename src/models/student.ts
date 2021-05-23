@@ -5,11 +5,13 @@ import { Grade } from './grade';
 export interface Student {
     name: string
     surname: string
-    grades: List<Grade>
+    grades: Grade[]
 }
 
-export const Student = (name: string, surname: string, grades: List<Grade>): Student => ({
+export const Student = (name: string, surname: string, grades: Grade[]): Student => ({
 	name,
 	surname,
 	grades
 });
+
+export default Student;

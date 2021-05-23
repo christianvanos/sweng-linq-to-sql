@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// currently disabled eslint because this is still a pre test stage... And it annoys me....
+
 /*
 
 Our program works by initializing our CustomList of type T. In this case T is a Student[] of a Grade[].
@@ -17,10 +20,17 @@ import { CustomList, ListType } from './utils/List'
 
 // importing Grade[] and Student[]
 import { GradeList1, GradeList2, GradeList3 } from './models/Examples/gradeExample';
+import { Student1, Student2, Student3 } from './models/Examples/studentExample';
 
 // creating List<Student> and List<Grade>
 const CustomGrades1: ListType<Grade> = CustomList(GradeList1);
 const CustomGrades2: ListType<Grade> = CustomList(GradeList2);
 const CustomGrades3: ListType<Grade> = CustomList(GradeList3);
 
+const CustomStudent1: ListType<Student> = CustomList(Student1);
+const CustomStudent2: ListType<Student> = CustomList(Student2);
+const CustomStudent3: ListType<Student> = CustomList(Student3);
+
 // Test cases
+
+CustomStudent1.select(['name']);

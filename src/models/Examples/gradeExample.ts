@@ -1,4 +1,5 @@
-import Grade from '../Grade';
+/* eslint-disable no-magic-numbers */
+import Grade from '../grade';
 
 const grade1 = Grade(8, 1);
 const grade2 = Grade(6, 2)
