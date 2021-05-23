@@ -13,24 +13,30 @@ CustomList.getError();
 
 the final result is stored in the CustomList.items property.
 
-//TODO: Implement lazy evaluation: https://en.wikipedia.org/wiki/Lazy_evaluation (REQUIRED!)
+Lazy evaluation is done by merging the id function in the chain with functions like select and include. This way we return a new object
+that we can use to chain our functions and create larger objects that contain functions which could evaluate to values when the
+CustomList<T>.getItems() function is called.
 */
 
+// Import types
 import { CustomList, ListType } from './utils/List'
+import Grade from './models/grade';
+import Student from './models/student';
 
 // importing Grade[] and Student[]
 import { GradeList1, GradeList2, GradeList3 } from './models/Examples/gradeExample';
-import { Student1, Student2, Student3 } from './models/Examples/studentExample';
+import { StudentList1, StudentList2, StudentList3 } from './models/Examples/studentExample';
 
 // creating List<Student> and List<Grade>
 const CustomGrades1: ListType<Grade> = CustomList(GradeList1);
 const CustomGrades2: ListType<Grade> = CustomList(GradeList2);
 const CustomGrades3: ListType<Grade> = CustomList(GradeList3);
 
-const CustomStudent1: ListType<Student> = CustomList(Student1);
-const CustomStudent2: ListType<Student> = CustomList(Student2);
-const CustomStudent3: ListType<Student> = CustomList(Student3);
+const CustomStudent1: ListType<Student> = CustomList(StudentList1);
+const CustomStudent2: ListType<Student> = CustomList(StudentList2);
+const CustomStudent3: ListType<Student> = CustomList(StudentList3);
 
 // Test cases
 
-CustomStudent1.select(['name']);
+// eslint-disable-next-line no-console
+console.log(CustomStudent1.select('name'));
