@@ -31,8 +31,6 @@ We expect this code to make use of the keyof type operator, the type homomorphis
 import { ListType, CustomList } from '../utils/List';
 
 const Select = <a, b>(obj: ListType<a>, args: string[]): ListType<b> => {
-	// eslint-disable-next-line no-console
-	console.log(args);
 	return CustomList<b>([]);
 }
 

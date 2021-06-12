@@ -41,3 +41,4 @@ const CustomStudent3: ListType<Student> = CustomList(StudentList3);
 // Test cases
 console.log(CustomStudent1.getItems());
 console.log(CustomStudent1.select('name').getItems());
+

@@ -6,4 +6,4 @@ https://github.com/hogeschool/Software-Engineering-Minor/blob/master/Projects/pr
 # Created by:
 - Mark Ernst (//TODO: STUDENTNUMBER)
 - Caslay Oort (0970621)
-- Christian van Os (//TODO: STUDENTNUMBER)
+- Christian van Os (0964032)

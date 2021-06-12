@@ -4,8 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch": "tsc -w",
-    "build": "tsc",
     "start": "ts-node src/index.ts"
   },
   "repository": {
