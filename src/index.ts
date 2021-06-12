@@ -1,4 +1,6 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+
 // currently disabled eslint because this is still a pre test stage... And it annoys me....
 
 /*
@@ -37,6 +39,5 @@ const CustomStudent2: ListType<Student> = CustomList(StudentList2);
 const CustomStudent3: ListType<Student> = CustomList(StudentList3);
 
 // Test cases
-
-// eslint-disable-next-line no-console
-console.log(CustomStudent1.select('name'));
+console.log(CustomStudent1.getItems());
+console.log(CustomStudent1.select('name').getItems());

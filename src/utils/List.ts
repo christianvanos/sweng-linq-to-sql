@@ -9,7 +9,7 @@ export type ListType<T> = {
     //mandatory
     select: <a>(this:ListType<T>, ...xargs: string[]) => ListType<a>
 
-    include: <b, c>(this:ListType<T>, l:ListType<b>) => ListType<c>
+    include: <b>(this:ListType<T>, l:ListType<b>) => ListType<T>
 
 	//optional
     orderby: (this:ListType<T>, order: ('ASC' | 'DESC'), by: string) => ListType<T>
@@ -21,7 +21,7 @@ export type ListType<T> = {
 		//error handling using variable. if set, chainables ignore their functions and just 
 		error: (string | null)
 		getError: (error: (string | null)) => void
-		getItems: (items: () => T[]) => void
+		getItems: (this: ListType<T>) => T[]
 }
 
 export const CustomList = <T>(list: T[] = []) : ListType<T> => {
@@ -31,7 +31,7 @@ export const CustomList = <T>(list: T[] = []) : ListType<T> => {
 
 		select: function<a>(this:ListType<T>, ...xargs: string[] ) : ListType<a> { return Select(this, xargs) },
 
-		include: function<b, c>(this:ListType<T>, l:ListType<b>) : ListType<c> { return Include(this, l) },
+		include: function<b>(this:ListType<T>, l:ListType<b>) : ListType<T> { return Include(this, l) },
 
 		orderby: function(this:ListType<T>, order: ('ASC' | 'DESC'), by:string) : ListType<T> { return OrderBy(this, order, by) },
 
@@ -41,6 +41,6 @@ export const CustomList = <T>(list: T[] = []) : ListType<T> => {
 		// eslint-disable-next-line no-console
 		getError: (e) => { console.log(e); },
 		
-		getItems: (items) => { return items(); }
+		getItems: function(this: ListType<T>) { return this.items(); }
 	}
 }
