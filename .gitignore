@@ -51,10 +51,6 @@ jspm_packages
 # Yarn Integrity file
 .yarn-integrity
 
-### VisualStudioCode ###
-.vscode/*
-
-
 ### Vim ###
 # swap
 [._]*.s[a-v][a-z]
