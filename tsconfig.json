@@ -6,7 +6,7 @@
     "sourceMap": true,
     "allowJs": true,
     "outDir": "build",
-    "rootDir": "src",
+    "rootDir": "./working-src/",
     "strict": true,
     "noImplicitAny": true,
     "esModuleInterop": true,
@@ -16,7 +16,8 @@
     "lib": ["esnext", "dom"]
   },
   "exclude": [
-    "node_modules",
-    "build"
+    "node_modules", 
+    "build",
+    "src"
   ]
 }
