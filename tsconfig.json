@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "esnext",
     "module": "commonjs",
-    "lib": ["es6"],
     "checkJs": true,
     "sourceMap": true,
     "allowJs": true,
@@ -13,11 +12,11 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["esnext", "dom"]
   },
   "exclude": [
     "node_modules",
-    "Software-Engineering-Minor",
     "build"
   ]
 }
