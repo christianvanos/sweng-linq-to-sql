@@ -8,7 +8,7 @@
 		"request": "launch",
 		"name": "Debug TypeScript in Node.js",
 		"preLaunchTask": "tsc: build - tsconfig.json",
-		"program": "${workspaceFolder}/src/index.ts",
+		"program": "${workspaceFolder}/working-src/Test.ts",
 		"cwd": "${workspaceFolder}",
 		"protocol": "inspector",
 		"outFiles": [
