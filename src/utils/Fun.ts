@@ -1,19 +1,12 @@
-type Fun<a, b> = {
-    f: (i:a) => b,
-    then: <c>(g:Fun<b, c>) => Fun<a, c>,
+export type Fun<a, b> = {
+	(_:a):b,
+	then:<c>(g:Fun<b, c>) => Fun<a, c>
 }
 
-const then = function<a, b, c>(f:Fun<a, b>, g:Fun<b, c>): Fun<a, c> {
-	return Fun<a, c>(a => g.f(f.f(a)));
-}
-
-const Fun = function<a, b>(f: (i:a) => b): Fun<a, b> {
-	return {
-		f:f,
-		then: function<c>(this:Fun<a, b>, g:Fun<b, c>): Fun<a, c> {
-			return then(this, g);
-		}
+export const Fun = <a, b>(f:(_:a) => b) : Fun<a, b> => {
+	const fun = f as Fun<a, b>
+	fun.then = function<c>(this:Fun<a, b>, g:Fun<b, c>) : Fun<a, c> {
+		return Fun(v => g(this(v)));
 	}
+	return fun
 }
-
-export default Fun;
