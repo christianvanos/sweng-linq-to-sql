@@ -1,23 +1,4 @@
-import * as Utils from './Utils';
-
-
-export interface Grades {
-    Grade: number;
-    CourseId: number;
-}
-
-export interface ExtraArray {
-    item1: string,
-    item2: string
-}
-
-export interface Student {
-    Name: string,
-    Surname: string,
-    Grades: Array<Grades>,
-    ExtraArray: Array<ExtraArray>,
-    StudentNumber: number
-}
+import * as Utils from '../utils/utils';
 
 export type Selectable<T> = {
     object: Array<T>,

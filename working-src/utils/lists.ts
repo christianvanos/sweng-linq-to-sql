@@ -1,5 +1,8 @@
-import * as Utils from './Utils';
-import * as Types from './Types';
+import * as Utils from './utils';
+import * as Types from '../types/workables';
+import Select from '../operators/select';
+import Include from '../operators/include';
+import Where from '../operators/where';
 
 export const Selectable = function<T>(object: Array<T>) : Types.Selectable<T> {
 	return {
