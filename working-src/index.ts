@@ -8,3 +8,5 @@ const selection = selectableStudents
 	.result
 
 console.log(JSON.stringify(selection, null, 4));
+
+//TODO @everybody variable namen veranderen en minder plagiaat achtig maken.

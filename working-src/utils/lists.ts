@@ -53,12 +53,8 @@ export const WorkingSchema = function<T, R>(object: Array<T>, result: Array<R>) 
 			return WorkingSchema<Omit<T, K>, R & Pick<T, K>>(newObject, newResult);
 		},
 		include: function<K extends keyof Utils.includeArrays<T>, S, r>(entity: K, query: (selectable: Types.InitialList<Utils.getKeysFromArray<T, K>>) => Types.WorkingSchema<S, r>) : Types.WorkingSchema<Omit<T, K>, r & { [key in K]: Array<r> }> {
-			const keysFromEntity = object.map(v => v[entity])
 			const newObject = object.map(v => Utils.omit<T, K>([entity])(v));
-
-			const selectableFromEntity = InitialList(keysFromEntity);
-
-			const queryResult = query(selectableFromEntity).result;
+			const queryResult = query(InitialList(object.map(v => v[entity]))).result;
 
 			const newResult = <any>([]);
 			for(let i = 0; i < object.length; i++){
@@ -66,6 +62,10 @@ export const WorkingSchema = function<T, R>(object: Array<T>, result: Array<R>) 
 			}
 
 			return WorkingSchema<Omit<T, K>, r & { [key in K]: Array<r> }>(newObject, newResult);
+		},
+		where: function() {
+			// TODO @caslay
+			return
 		}
 	}
 }
