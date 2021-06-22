@@ -13,6 +13,9 @@ export type excludeArray<T> =
 export type getKeysFromArray<T, K extends keyof includeArrays<T>> = 
 	T[K] extends Array<infer U> ? U : never;
 
+export type Unit = {}
+
+export const Unit : Unit = {}
 
 export const Fun = <a, b>(f:(_:a) => b) : Fun<a, b> => {
 	const fun = f as Fun<a, b>
