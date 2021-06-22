@@ -55,7 +55,10 @@ const workingTable = function<T, R>(object: Array<T>, result: Array<R>) : Types.
 			return workingTable<Omit<T, K>, Pick<T, K>>(newObject, newResult);
 		},
 		include: function<K extends keyof Utils.includeArrays<T>, S, r>(entity: K, q: (selectable: Types.initialTable<Utils.getKeysFromArray<T, K>>) => Types.workingTable<S, r>) : Types.workingTable<Omit<T, K>, R & { [key in K]: Array<r>}> {
+			// omits the entity ("Table") from the object
 			const newObject = object.map(v => Utils.omit<T, K>([entity])(v));
+
+			// runs the query over the entity and combines it with the result to produce the new result
 			const newResult = object.map((_, index) => { return {...result[index], ...{ [entity]: q(initialTable(object.map(v => v[entity]))).result[index] } as unknown as {[key in K]: Array<r>}} });
 
 			return workingTable<Omit<T, K>, R & { [key in K]: Array<r>}>(newObject, newResult);
