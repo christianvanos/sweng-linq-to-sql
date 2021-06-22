@@ -8,7 +8,7 @@ export const InitialList = function<T>(object: Array<T>) : Types.InitialList<T> 
 			const newResult = <any>([]);
 
 			object.forEach((value, index) => {
-				if(Array.isArray(value) && Object.keys(value).length > 1){
+				if(Array.isArray(value)) {
 					const subArray: any = object[index] as any
 					newResult[index] = []
 					subArray.forEach((innerValue: any) => { 
@@ -20,7 +20,7 @@ export const InitialList = function<T>(object: Array<T>) : Types.InitialList<T> 
 			})
 
 			const newObject = <any>([])
-			object.forEach(element => { newObject.push(Utils.omit<T, K>(entities)(element)); });
+			object.forEach(element => newObject.push(Utils.omit<T, K>(entities)(element)));
 
 			// eslint-disable-next-line no-use-before-define
 			return WorkingSchema<Omit<T, K>, Pick<T, K>>(newObject, newResult);
@@ -32,23 +32,25 @@ export const WorkingSchema = function<T, R>(object: Array<T>, result: Array<R>) 
 	return {
 		object: object,
 		result: result,
-		select: function<K extends keyof T>(...selectedEntities: Array<K>) : Types.WorkingSchema<Omit<T, K>, R & Pick<T, K>> {
+		select: function<K extends keyof T>(...entities: Array<K>) : Types.WorkingSchema<Omit<T, K>, R & Pick<T, K>> {
 			const newResult = <any>([]);
 
 			object.forEach((value, index) => { 
-				newResult[index] = {...<any>result[index], ...Utils.pick<T, K>(selectedEntities)(value)}
+				newResult[index] = {...<any>result[index], ...Utils.pick<T, K>(entities)(value)}
 				
 				if(Array.isArray(value)) {
 					newResult[index] = []
 					
 					for(let g = 0; g < Object.keys(value).length; g++) {
-						newResult[index][g] = {...(<any>result)[index][g], ...Utils.pick<T, K>(selectedEntities)(value[g])};
+						newResult[index][g] = {...(<any>result)[index][g], ...Utils.pick<T, K>(entities)(value[g])};
 					}
+				} else {
+					newResult[index] = Utils.pick<T, K>(entities)(object[index])
 				}
 			});
 
 			const newObject = <any>([])
-			object.forEach(element => { newObject.push(Utils.omit<T, K>(selectedEntities)(element)); });
+			object.forEach(element => newObject.push(Utils.omit<T, K>(entities)(element)));
 
 			return WorkingSchema<Omit<T, K>, R & Pick<T, K>>(newObject, newResult);
 		},
@@ -56,10 +58,8 @@ export const WorkingSchema = function<T, R>(object: Array<T>, result: Array<R>) 
 			const newObject = object.map(v => Utils.omit<T, K>([entity])(v));
 			const queryResult = query(InitialList(object.map(v => v[entity]))).result;
 
-			const newResult = <any>([]);
-			for(let i = 0; i < object.length; i++){
-				newResult[i] = {...result[i], ...{ [entity]: (<any>queryResult)[i] } as {[key in K]: Array<r> }}
-			}
+			const newResult = <any>[];
+			object.forEach((_, index) => {newResult[index] = {...result[index], ...{ [entity]: [queryResult[index]] } as {[key in K]: Array<r> }}})
 
 			return WorkingSchema<Omit<T, K>, r & { [key in K]: Array<r> }>(newObject, newResult);
 		},
