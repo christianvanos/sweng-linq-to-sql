@@ -1,7 +1,3 @@
 TODO: 	create the where operator 
-TODO: 	make the operators lazy 
-TODO: 	operators must be in a folder called operators and 
-		every operator must be in a descriptive name
-TODO:	comment the code
-TODO: 	make it less look like plagiarism
+TODO: 	make it lazy 
 TODO:	when finished move code to folder src instead of working-src

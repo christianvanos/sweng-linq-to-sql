@@ -1,7 +1,7 @@
-import { InitialList } from './utils/lists';
+import { initialTable } from './utils/lists';
 import { students } from './examples/students'
 
-const selectableStudents = InitialList(students);
+const selectableStudents = initialTable(students);
 const selection = selectableStudents
 	.select('Name').select('StudentNumber', 'Surname')
 	.include('Grades', t => t.select('CourseId'))
