@@ -44,6 +44,10 @@ const table = function<T, R>(object: Array<T>, result: Array<R>) : Types.table<T
 	}
 }
 
+const createTable = <T>(object: T[]): Types.table<T, Utils.Unit> => {
+	return table<T, Utils.Unit>(object, [Utils.Unit])
+}
+
 const lazyTable = function<T1, T2, R> (q: Utils.Fun<Types.table<T1, Utils.Unit>, Types.table<T2, R>>) : Types.lazyTable<T1, T2, R> {
 	return { 
 		query: q,
@@ -56,14 +60,10 @@ const lazyTable = function<T1, T2, R> (q: Utils.Fun<Types.table<T1, Utils.Unit>,
 		where: function() : void {
 			// TODO @caslay
 		},
-		apply: function (data: Types.table<T1, Utils.Unit>): R[] {
-			return this.query(data).result
+		apply: function (data: T1[]): R[] {
+			return this.query(createTable(data)).result
 		}
 	}
-}
-
-export const createTable = <T>(object: T[]): Types.table<T, Utils.Unit> => {
-	return table<T, Utils.Unit>(object, [Utils.Unit])
 }
 
 export const createLazyTable = <T>(): Types.lazyTable<T, T, Utils.Unit> => {

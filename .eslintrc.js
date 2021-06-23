@@ -17,7 +17,6 @@ module.exports = {
 	'rules': {
 		/* Rules found at: http://eslint.org/docs/rules/ */
 		/* Possible errors */
-		'no-console': 'warn',
 		'no-extra-parens': 'warn',
 		'no-var': 'error',
 		'no-template-curly-in-string': 'error',

@@ -13,5 +13,5 @@ export type lazyTable<T1, T2, R> = {
     select: <K extends keyof T2>(...properties: K[]) => lazyTable<T1, Omit<T2, K>, Pick<T2, K>>
     include: <K extends keyof Utils.includeArrays<T2>, S, r>(entity: K, q: (selectable: table<Utils.getKeysFromArray<T2, K>, Utils.Unit>) => table<S, r>) => lazyTable<T1, Omit<T2, K>, R & { [key in K]: Array<r> }>
     where: () => void // TODO @caslay
-    apply: (data: table<T1, Utils.Unit>) => R[]
+    apply: (data: T1[]) => R[]
 }
