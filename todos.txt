@@ -1,2 +1,1 @@
 TODO: 	create the where operator 
-TODO:	when finished move code to folder src instead of working-src
