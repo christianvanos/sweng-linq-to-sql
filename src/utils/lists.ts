@@ -13,11 +13,11 @@ import * as Types from '../types/workables';
 	The object holds the initial object except the selected fields (omits the selected fields)
 	The result holds the selected fields (picks the selected fields).
 */
-const table = function<T, R>(object: Array<T>, result: Array<R>) : Types.table<T, R> {
+const table = function<T, R>(object: T[], result: R[]) : Types.table<T, R> {
 	return {
 		object: object,
 		result: result,
-		select: function<K extends keyof T>(...selectedFields: Array<K>) : Types.table<Omit<T, K>, Pick<T, K>> {
+		select: function<K extends keyof T>(...selectedFields: K[]) : Types.table<Omit<T, K>, Pick<T, K>> {
 			// remove the selected fields from the object and save it into newObject (omitting the selected fields)
 			const newObject = object.map(v => Utils.omit<T, K>(selectedFields)(v));
 			
@@ -28,15 +28,15 @@ const table = function<T, R>(object: Array<T>, result: Array<R>) : Types.table<T
 
 			return table<Omit<T, K>, Pick<T, K>>(newObject, newResult);
 		},
-		include: function<K extends keyof Utils.includeArrays<T>, S, r>(entity: K, q: (selectable: Types.table<Utils.getKeysFromArray<T, K>, Utils.Unit>) => Types.table<S, r>) : Types.table<Omit<T, K>, R & { [key in K]: Array<r>}> {
+		include: function<K extends keyof Utils.includeArrays<T>, S, r>(entity: K, q: (selectable: Types.table<Utils.getKeysFromArray<T, K>, Utils.Unit>) => Types.table<S, r>) : Types.table<Omit<T, K>, R & { [key in K]: r[]}> {
 			// omits the entity ("Table") from the object
 			const newObject = object.map(v => Utils.omit<T, K>([entity])(v));
 
 			// runs the query over the entity and combines it with the result to produce the new result
 			// eslint-disable-next-line no-use-before-define
-			const newResult = object.map((_, index) => { return {...result[index], ...{ [entity]: q(createTable(object.map(v => v[entity]))).result[index] } as unknown as {[key in K]: Array<r>}} });
+			const newResult = object.map((_, index) => { return {...result[index], ...{ [entity]: q(createTable(object.map(v => v[entity]))).result[index] } as unknown as {[key in K]: r[]}} });
 
-			return table<Omit<T, K>, R & { [key in K]: Array<r>}>(newObject, newResult);
+			return table<Omit<T, K>, R & { [key in K]: r[]}>(newObject, newResult);
 		},
 		where: function() : void {
 			// TODO @caslay

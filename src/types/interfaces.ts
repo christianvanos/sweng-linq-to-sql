@@ -5,6 +5,6 @@ export interface Grades {
 export interface Student {
     Name: string,
     Surname: string,
-    Grades: Array<Grades>,
+    Grades: Grades[],
     StudentNumber: number
 }

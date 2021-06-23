@@ -5,10 +5,10 @@ export type Fun<a, b> = {
 }
 
 export type includeArrays<T> = 
-	Pick<T, {[K in keyof T]: T[K] extends Array<object> ? K : never}[keyof T]>;
+	Pick<T, {[K in keyof T]: T[K] extends object[] ? K : never}[keyof T]>;
 
 export type excludeArray<T> = 
-	Pick<T, {[K in keyof T]: T[K] extends Array<object> ? never : K}[keyof T]>;
+	Pick<T, {[K in keyof T]: T[K] extends object[] ? never : K}[keyof T]>;
 
 export type getKeysFromArray<T, K extends keyof includeArrays<T>> = 
 	T[K] extends Array<infer U> ? U : never;
@@ -25,7 +25,7 @@ export const Fun = <a, b>(f:(_:a) => b) : Fun<a, b> => {
 	return fun
 }
 
-export const pick = <T, K extends keyof T>(keys: Array<K>): Fun<T, Pick<T, K>> => 
+export const pick = <T, K extends keyof T>(keys: K[]): Fun<T, Pick<T, K>> => 
 	Fun(object =>
         keys.map(key => key in object ? { [key]: object[key] } : {}).reduce((res, o) => ({ ...res, ...o }), {}) as Pick<T, K>
 	);
