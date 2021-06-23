@@ -1,4 +1,4 @@
-export type Grades = {
+type Grades = {
     Grade: number;
     CourseId: number;
 }
