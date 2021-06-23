@@ -23,7 +23,7 @@ const table = function<T, R>(object: Array<T>, result: Array<R>) : Types.table<T
 			
 			// include the new selectedFields into the result and save it into newResult
 			const newResult = object.map((value, index) => {
-				return {...(Array.isArray(value) ? value.map((v1) => Utils.pick<T, K>(selectedFields)(v1))[0] : Utils.pick<T, K>(selectedFields)(value)), ...result[index]}
+				return {...Array.isArray(value) ? value.map((v1) => Utils.pick<T, K>(selectedFields)(v1))[0] : Utils.pick<T, K>(selectedFields)(value), ...result[index]}
 			});
 
 			return table<Omit<T, K>, Pick<T, K>>(newObject, newResult);
@@ -33,13 +33,13 @@ const table = function<T, R>(object: Array<T>, result: Array<R>) : Types.table<T
 			const newObject = object.map(v => Utils.omit<T, K>([entity])(v));
 
 			// runs the query over the entity and combines it with the result to produce the new result
+			// eslint-disable-next-line no-use-before-define
 			const newResult = object.map((_, index) => { return {...result[index], ...{ [entity]: q(createTable(object.map(v => v[entity]))).result[index] } as unknown as {[key in K]: Array<r>}} });
 
 			return table<Omit<T, K>, R & { [key in K]: Array<r>}>(newObject, newResult);
 		},
-		where: function() : any {
+		where: function() : void {
 			// TODO @caslay
-			return null!
 		}
 	}
 }
@@ -48,14 +48,13 @@ const lazyTable = function<T1, T2, R> (q: Utils.Fun<Types.table<T1, Utils.Unit>,
 	return { 
 		query: q,
 		select: function <K extends keyof T2>(...properties: K[]): Types.lazyTable<T1, Omit<T2, K>, Pick<T2, K>> {
-			return lazyTable(this.query.then(Utils.Fun(table => table.select(...properties))))
+			return lazyTable(this.query.then(Utils.Fun(t => t.select(...properties))))
 		},
 		include: function<K extends keyof Utils.includeArrays<T2>, S, r>(entity: K, q1: (selectable: Types.table<Utils.getKeysFromArray<T2, K>, Utils.Unit>) => Types.table<S, r>) {
-			return lazyTable(this.query.then(Utils.Fun(table => table.include(entity, q1))))
+			return lazyTable(this.query.then(Utils.Fun(t => t.include(entity, q1))))
 		},
-		where: function() : any {
+		where: function() : void {
 			// TODO @caslay
-			return null!
 		},
 		apply: function (data: Types.table<T1, Utils.Unit>): R[] {
 			return this.query(data).result

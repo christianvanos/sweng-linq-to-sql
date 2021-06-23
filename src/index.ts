@@ -10,4 +10,5 @@ const selection = lazyStudentsTable
 	.include('Grades', t => t.select('CourseId'))
 	.apply(selectableStudents)
 
-console.log(JSON.stringify(selection, null, 4));
+// eslint-disable-next-line no-console
+console.log(JSON.stringify(selection));
