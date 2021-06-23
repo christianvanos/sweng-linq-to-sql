@@ -1,12 +1,13 @@
-import { createTable } from './utils/lists';
+import { createTable, createLazyTable } from './utils/lists';
+import { Student } from './types/interfaces'
 import { students } from './examples/students'
 
 const selectableStudents = createTable(students)
-const selection = selectableStudents
+
+const lazyStudentsTable = createLazyTable<Student>();
+const selection = lazyStudentsTable
 	.select('Name').select('StudentNumber', 'Surname')
 	.include('Grades', t => t.select('CourseId'))
-	.result
+	.apply(selectableStudents)
 
 console.log(JSON.stringify(selection, null, 4));
-
-//TODO @everybody variable namen veranderen en minder plagiaat achtig maken.
