@@ -73,5 +73,5 @@ const lazyTable = function<T1, T2, R> (query: Utils.Fun<Types.table<T1, Utils.Un
 	initialize a lazyTable with a Functor which creates a new table
 */
 export const createLazyTable = <T>(): Types.lazyTable<T, T, Utils.Unit> => {
-	return lazyTable(Utils.Fun(t => createTable(t.object)))
+	return lazyTable(Utils.Fun(t => t))
 }
