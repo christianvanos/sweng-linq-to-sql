@@ -1,4 +1,4 @@
-import { Student } from '../types/interfaces';
+import { Student } from '../types/models';
 
 const StudentOne: Student = {
 	Name: 'Christian',

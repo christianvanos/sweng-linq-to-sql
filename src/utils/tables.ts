@@ -1,5 +1,5 @@
 import * as Utils from './utils';
-import * as Types from '../types/workables';
+import * as Types from '../types/tables';
 
 /*
 	The table holds all the different methods that can be used in this Linq system.
@@ -44,6 +44,9 @@ const table = function<T, R>(object: T[], result: R[]) : Types.table<T, R> {
 	}
 }
 
+/*
+	initialize a table with an object and empty result
+*/
 const createTable = <T>(object: T[]): Types.table<T, Utils.Unit> => {
 	return table<T, Utils.Unit>(object, [Utils.Unit])
 }
@@ -66,6 +69,9 @@ const lazyTable = function<T1, T2, R> (q: Utils.Fun<Types.table<T1, Utils.Unit>,
 	}
 }
 
+/*
+	initialize a lazyTable with a Functor which creates a new table
+*/
 export const createLazyTable = <T>(): Types.lazyTable<T, T, Utils.Unit> => {
 	return lazyTable(Utils.Fun(data => createTable(data.object)))
 }

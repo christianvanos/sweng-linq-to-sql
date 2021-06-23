@@ -1,5 +1,5 @@
-import { createLazyTable } from './utils/lists';
-import { Student } from './types/interfaces'
+import { createLazyTable } from './utils/tables';
+import { Student } from './types/models'
 import { students } from './examples/students'
 
 const lazyStudentsTable = createLazyTable<Student>();

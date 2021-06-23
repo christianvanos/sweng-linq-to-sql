@@ -1,8 +1,8 @@
-export interface Grades {
+export type Grades = {
     Grade: number;
     CourseId: number;
 }
-export interface Student {
+export type Student = {
     Name: string,
     Surname: string,
     Grades: Grades[],
