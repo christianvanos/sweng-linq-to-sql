@@ -15,8 +15,8 @@ import * as Types from '../types/tables';
 */
 const table = function<T, R>(object: T[], result: R[]) : Types.table<T, R> {
 	return {
-		object: object,
-		result: result,
+		object,
+		result,
 		select: function<K extends keyof T>(...selectedFields: K[]) : Types.table<Omit<T, K>, Pick<T, K>> {
 			// remove the selected fields from the object and save it into newObject (omitting the selected fields)
 			const newObject = object.map(v => Utils.omit<T, K>(selectedFields)(v));
@@ -28,7 +28,7 @@ const table = function<T, R>(object: T[], result: R[]) : Types.table<T, R> {
 
 			return table<Omit<T, K>, Pick<T, K>>(newObject, newResult);
 		},
-		include: function<K extends keyof Utils.includeArrays<T>, S, r>(entity: K, q: (selectable: Types.table<Utils.getKeysFromArray<T, K>, Utils.Unit>) => Types.table<S, r>) : Types.table<Omit<T, K>, R & { [key in K]: r[]}> {
+		include: function<K extends keyof Utils.includeArrays<T>, S, r>(entity: K, q: (t: Types.table<Utils.getKeysFromArray<T, K>, Utils.Unit>) => Types.table<S, r>) : Types.table<Omit<T, K>, R & { [key in K]: r[]}> {
 			// omits the entity ("Table") from the object
 			const newObject = object.map(v => Utils.omit<T, K>([entity])(v));
 
@@ -51,20 +51,20 @@ const createTable = <T>(object: T[]): Types.table<T, Utils.Unit> => {
 	return table<T, Utils.Unit>(object, [Utils.Unit])
 }
 
-const lazyTable = function<T1, T2, R> (q: Utils.Fun<Types.table<T1, Utils.Unit>, Types.table<T2, R>>) : Types.lazyTable<T1, T2, R> {
+const lazyTable = function<T1, T2, R> (query: Utils.Fun<Types.table<T1, Utils.Unit>, Types.table<T2, R>>) : Types.lazyTable<T1, T2, R> {
 	return { 
-		query: q,
-		select: function <K extends keyof T2>(...properties: K[]): Types.lazyTable<T1, Omit<T2, K>, Pick<T2, K>> {
-			return lazyTable(this.query.then(Utils.Fun(t => t.select(...properties))))
+		query,
+		select: function <K extends keyof T2>(...selectedFields: K[]): Types.lazyTable<T1, Omit<T2, K>, Pick<T2, K>> {
+			return lazyTable(query.then(Utils.Fun(t => t.select(...selectedFields))))
 		},
-		include: function<K extends keyof Utils.includeArrays<T2>, S, r>(entity: K, q1: (selectable: Types.table<Utils.getKeysFromArray<T2, K>, Utils.Unit>) => Types.table<S, r>) {
-			return lazyTable(this.query.then(Utils.Fun(t => t.include(entity, q1))))
+		include: function<K extends keyof Utils.includeArrays<T2>, S, r>(entity: K, q: (t: Types.table<Utils.getKeysFromArray<T2, K>, Utils.Unit>) => Types.table<S, r>) {
+			return lazyTable(query.then(Utils.Fun(t => t.include(entity, q))))
 		},
 		where: function() : void {
 			// TODO @caslay
 		},
 		apply: function (data: T1[]): R[] {
-			return this.query(createTable(data)).result
+			return query(createTable(data)).result
 		}
 	}
 }
@@ -73,5 +73,5 @@ const lazyTable = function<T1, T2, R> (q: Utils.Fun<Types.table<T1, Utils.Unit>,
 	initialize a lazyTable with a Functor which creates a new table
 */
 export const createLazyTable = <T>(): Types.lazyTable<T, T, Utils.Unit> => {
-	return lazyTable(Utils.Fun(data => createTable(data.object)))
+	return lazyTable(Utils.Fun(t => createTable(t.object)))
 }
