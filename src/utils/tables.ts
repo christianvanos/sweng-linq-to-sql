@@ -38,8 +38,13 @@ const table = function<T, R>(object: T[], result: R[]) : Types.table<T, R> {
 
 			return table<Omit<T, K>, R & { [key in K]: r[]}>(newObject, newResult);
 		},
-		where: function() : void {
-			// TODO @caslay
+		orderby: function<K extends keyof T>(order: ('ASC' | 'DESC'), by: K) : Types.table<T, R> {
+			// No need to create a new object since this function does not work like a filter.
+			// Work in progress... sorting the result.
+			const res = result.sort((a, b) => a[by] > (b[by]));
+
+			// returning a new table with the same object and a sorted result.
+			return table<T, R>(object, res);
 		}
 	}
 }
@@ -60,8 +65,8 @@ const lazyTable = function<T1, T2, R> (query: Utils.Fun<Types.table<T1, Utils.Un
 		include: function<K extends keyof Utils.includeArrays<T2>, S, r>(entity: K, q: (t: Types.table<Utils.getKeysFromArray<T2, K>, Utils.Unit>) => Types.table<S, r>) {
 			return lazyTable(query.then(Utils.Fun(t => t.include(entity, q))))
 		},
-		where: function() : void {
-			// TODO @caslay
+		orderby: function<K extends keyof T2>(order: ('ASC' | 'DESC'), by: K) {
+			return lazyTable(query.then(Utils.Fun(t => t.orderby(order, by))))
 		},
 		apply: function (data: T1[]): R[] {
 			return query(createTable(data)).result
