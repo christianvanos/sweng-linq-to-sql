@@ -43,7 +43,7 @@ const table = function<T, R>(object: T[], result: R[]) : Types.table<T, R> {
 
 			// Sorting the result using a custom sorting function.
 			// A custom function is needed because you do not know what you will be filtering.
-			const res = result.sort((a, b) => Utils.sortArray(order, by, a, b));
+			const res = result.sort((a, b) => Utils.sortArray<R, K>(order, by, a, b));
 
 			// returning a new table with the same object and a sorted result.
 			return table<T, R>(object, res);
