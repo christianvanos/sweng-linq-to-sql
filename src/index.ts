@@ -3,15 +3,19 @@ import { Student } from './types/models'
 import { students } from './examples/students'
 
 const lazyStudentsTable = createLazyTable<Student>();
-// const selection = lazyStudentsTable
-// 	.select('Name').select('StudentNumber', 'Surname')
-// 	.include('Grades', t => t.select('CourseId'))
-// 	.apply(students)
 
-// console.log(JSON.stringify(selection));
+const select = lazyStudentsTable
+	.select('Name').apply(students)
 
-const orderby = lazyStudentsTable
-	.select('Name', 'Surname', 'StudentNumber').orderby('ASC', 'StudentNumber')
+const include = lazyStudentsTable
+	.select('Name').select('StudentNumber', 'Surname')
+	.include('Grades', t => t.select('CourseId'))
 	.apply(students)
 
-console.log(JSON.stringify(orderby));
+const orderby = lazyStudentsTable
+	.select('Name', 'StudentNumber').orderby('ASC', 'StudentNumber')
+	.apply(students)
+
+console.log('Select:', select);
+console.log('Include:', include);
+console.log('Orderby:', orderby);
