@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
-export type Fun<a, b> = {
-	(_:a):b,
-	then:<c>(g:Fun<b, c>) => Fun<a, c>
-}
 
+// These are types used in the utils/tables.ts file. To keep the project
+// clean these are stored here. Otherwise it would be a very long string...
 export type includeArrays<T> = 
 	Pick<T, {[K in keyof T]: T[K] extends object[] ? K : never}[keyof T]>;
 
@@ -13,9 +11,11 @@ export type excludeArray<T> =
 export type getKeysFromArray<T, K extends keyof includeArrays<T>> = 
 	T[K] extends Array<infer U> ? U : never;
 
-export type Unit = {}
-
-export const Unit : Unit = {}
+// Fun is used to compose functions to keep the program lazy.
+export type Fun<a, b> = {
+	(_:a):b,
+	then:<c>(g:Fun<b, c>) => Fun<a, c>
+}
 
 export const Fun = <a, b>(f:(_:a) => b) : Fun<a, b> => {
 	const fun = f as Fun<a, b>
@@ -24,6 +24,13 @@ export const Fun = <a, b>(f:(_:a) => b) : Fun<a, b> => {
 	}
 	return fun
 }
+
+// Unit is the default result. This is needed because there is no result by
+// default because we compose functions and it does not have to be executed.
+export type Unit = {}
+export const Unit : Unit = {}
+
+// Functions to execute operations on objects
 
 export const pick = <T, K extends keyof T>(keys: K[]): Fun<T, Pick<T, K>> => 
 	Fun(object =>

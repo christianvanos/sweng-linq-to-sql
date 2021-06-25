@@ -40,7 +40,9 @@ const table = function<T, R>(object: T[], result: R[]) : Types.table<T, R> {
 		},
 		orderby: function<K extends keyof R>(order: ('ASC' | 'DESC'), by: K) : Types.table<T, R> {
 			// No need to create a new object since this function does not work like a filter.
-			// Work in progress... sorting the result.
+
+			// Sorting the result using a custom sorting function.
+			// A custom function is needed because you do not know what you will be filtering.
 			const res = result.sort((a, b) => Utils.sortArray(order, by, a, b));
 
 			// returning a new table with the same object and a sorted result.

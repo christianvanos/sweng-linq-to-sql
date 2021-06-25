@@ -1,5 +1,10 @@
 import * as Utils from '../utils/utils';
 
+/*
+T: The generic type for the object
+R: The generic type for the result
+*/
+
 export type table<T, R> = {
     object: T[],
     result: R[],
@@ -7,6 +12,13 @@ export type table<T, R> = {
     include: <K extends keyof Utils.includeArrays<T>, S, r>(entity: K, q: (t: table<Utils.getKeysFromArray<T, K>, Utils.Unit>) => table<S, r>) => table<Omit<T, K>, R & { [key in K]: r[] }>,
     orderby: <K extends keyof R>(order: ('ASC' | 'DESC'), by: K) => table<T, R>
 }
+
+/*
+T1: Starting object. This object will remain the same all the time. This is only used in apply to give it to the table.
+T2: Current object. When functions have been called, the object is composed with another table. This way we keep the program lazy.
+R: Result. When apply is used the result will be updated. Utils.Unit will be a default (an empty object) because there is no result
+           apply has not been called yet due to the lazy structure of the program.
+*/
 
 export type lazyTable<T1, T2, R> = {
 	query: Utils.Fun<table<T1, Utils.Unit>, table<T2, R>>,
