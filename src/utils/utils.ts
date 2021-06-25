@@ -37,3 +37,19 @@ export const omit = <T, K extends keyof T>(keys: Array<keyof T>): Fun<T, Omit<T,
         getKeysFromObject(object).map(key => keys.includes(key) ? {} : { [key]: object[key] }).reduce((res, o) => ({ ...res, ...o }), {}) as Omit<T, K>
 	);
 
+export function sortArray(order: ('ASC' | 'DESC'), by: any, a: any, b: any) : number {
+	const sortOrder = order === 'ASC' ? 1 : -1;
+	
+	const res = a[by] === String ? 
+		(() => {
+			const itemOne = a[by].charAt(0).toUpperCase() + a[by].slice(1);
+			const itemTwo = b[by].charAt(0).toUpperCase() + b[by].slice(1);
+			return itemOne < itemTwo ? -sortOrder : itemOne > itemTwo ? sortOrder : 0;
+		})()
+		:
+		a[by] < b[by] ? -sortOrder : 
+			a[by] > b[by] ?
+				sortOrder : 0;
+
+	return res;
+}
