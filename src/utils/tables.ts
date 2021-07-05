@@ -51,5 +51,5 @@ const lazyTable = <T1, T2, R>(q: UtilsTypes.Fun<Types.table<T1, UtilsTypes.Unit>
 
 
 export const createLazyTable = <T>() : Types.lazyTable<T, T, UtilsTypes.Unit> => 
-	lazyTable(Utils.Fun(v => v))
+	lazyTable(Utils.Fun(t => t))
 
