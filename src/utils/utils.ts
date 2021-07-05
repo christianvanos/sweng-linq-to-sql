@@ -2,13 +2,13 @@
 
 // These are types used in the utils/tables.ts file. To keep the project
 // clean these are stored here. Otherwise it would be a very long string...
-export type includeArrays<T> = 
+export type onlyArrays<T> = 
 	Pick<T, {[K in keyof T]: T[K] extends object[] ? K : never}[keyof T]>;
 
 export type excludeArray<T> = 
 	Pick<T, {[K in keyof T]: T[K] extends object[] ? never : K}[keyof T]>;
 
-export type getKeysFromArray<T, K extends keyof includeArrays<T>> = 
+export type getKeysFromArray<T, K extends keyof onlyArrays<T>> = 
 	T[K] extends (infer U)[] ? U : never;
 
 export type Order = 'ASC' | 'DESC'
