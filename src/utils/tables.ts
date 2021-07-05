@@ -17,7 +17,7 @@ const table = function<T, R>(object: T[], result: R[]) : Types.table<T, R> {
 	return {
 		object,
 		result,
-		select: function<K extends keyof T>(...selectedFields: K[]) : Types.table<Omit<T, K>, Pick<T, K>> {
+		select: function<K extends keyof T>(...selectedFields: K[]) : Types.table<Omit<T, K>, Pick<T, K> & R> {
 			// remove the selected fields from the object and save it into newObject (omitting the selected fields)
 			const newObject = object.map(v => Utils.omit<T, K>(selectedFields)(v));
 			
@@ -33,7 +33,7 @@ const table = function<T, R>(object: T[], result: R[]) : Types.table<T, R> {
 
 			return table<Omit<T, K>, Pick<T, K> & R>(newObject, newResult);
 		},
-		include: function<K extends keyof Utils.includeArrays<T>, S, r>(entity: K, q: (t: Types.table<Utils.getKeysFromArray<T, K>, Utils.Unit>) => Types.table<S, r>) : Types.table<Omit<T, K>, R & { [key in K]: r[]}> {
+		include: function<K extends keyof Utils.includeArrays<T>, S, r>(entity: K, q: (t: Types.table<Utils.getKeysFromArray<T, K>, Utils.Unit>) => Types.table<S, r>) : Types.table<Omit<T, K>, { K: r[]} & R> {
 			// omits the entity ("Table") from the object
 			const newObject = object.map(v => Utils.omit<T, K>([entity])(v));
 
@@ -41,9 +41,9 @@ const table = function<T, R>(object: T[], result: R[]) : Types.table<T, R> {
 			// eslint-disable-next-line no-use-before-define
 			const newResult = q(createTable(object.map(v => v[entity]))).result.map((value, index) => {
 				return {...result[index], [entity]: Object.values(value)}
-			}) as ({ [key in K]: r[]; } & R)[]
+			}) as ({ K : r[]; } & R)[]
 			
-			return table<Omit<T, K>, {[key in K]: r[]} & R>(newObject, newResult);
+			return table<Omit<T, K>, { K: r[] } & R>(newObject, newResult);
 		},
 		orderby: function<K extends keyof R>(order: ('ASC' | 'DESC'), by: K) : Types.table<T, R> {
 			// No need to create a new object since this function does not work like a filter.
@@ -68,16 +68,16 @@ const createTable = <T>(object: T[]): Types.table<T, Utils.Unit> => {
 const lazyTable = function<T1, T2, R> (query: Utils.Fun<Types.table<T1, Utils.Unit>, Types.table<T2, R>>) : Types.lazyTable<T1, T2, R> {
 	return { 
 		query,
-		select: function <K extends keyof T2>(...selectedFields: K[]): Types.lazyTable<T1, Omit<T2, K>, Pick<T2, K>> {
+		select: function <K extends keyof T2>(...selectedFields: K[]) : Types.lazyTable<T1, Omit<T2, K>, Pick<T2, K> & R> {
 			return lazyTable(query.then(Utils.Fun(t => t.select(...selectedFields))))
 		},
-		include: function<K extends keyof Utils.includeArrays<T2>, S, r>(entity: K, q: (t: Types.table<Utils.getKeysFromArray<T2, K>, Utils.Unit>) => Types.table<S, r>) {
+		include: function<K extends keyof Utils.includeArrays<T2>, S, r>(entity: K, q: (t: Types.table<Utils.getKeysFromArray<T2, K>, Utils.Unit>) => Types.table<S, r>) : Types.lazyTable<T1, Omit<T2, K>, { K: r[] } & R> {
 			return lazyTable(query.then(Utils.Fun(t => t.include(entity, q))))
 		},
-		orderby: function<K extends keyof R>(order: ('ASC' | 'DESC'), by: K) {
+		orderby: function<K extends keyof R>(order: ('ASC' | 'DESC'), by: K) : Types.lazyTable<T1, T2, R> {
 			return lazyTable(query.then(Utils.Fun(t => t.orderby(order, by))))
 		},
-		apply: function (data: T1[]): R[] {
+		apply: function (data: T1[]) : R[] {
 			return query(createTable(data)).result
 		}
 	}
