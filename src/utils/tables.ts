@@ -16,7 +16,7 @@ const table = <T, R>(o: T[], r: R[]) : Types.table<T, R> =>
 					})
 				)
 			),
-		include: <K extends keyof UtilsTypes.onlyArrays<T>, t1, r1>(entity: K, q: (t: Types.table<UtilsTypes.getKeysFromArray<T, K>, UtilsTypes.Unit>) => Types.table<t1, r1>) => 
+		include: <K extends keyof UtilsTypes.onlyArray<T>, t1, r1>(entity: K, q: (t: Types.table<UtilsTypes.getInnerEntity<T, K>, UtilsTypes.Unit>) => Types.table<t1, r1>) => 
 			table(
 				o.map(v => Utils.omit<T, K>(v, [entity])), 
 				o.map((v, i) => 
@@ -40,7 +40,7 @@ const lazyTable = <T1, T2, R>(q: UtilsTypes.Fun<Types.table<T1, UtilsTypes.Unit>
 		select: <K extends keyof T2>(...k: K[]) => 
 			lazyTable(q.then(Utils.Fun(t => t.select(...k)))),
 		
-		include: <K extends keyof UtilsTypes.onlyArrays<T2>, S, r>(entity: K, q1: (t: Types.table<UtilsTypes.getKeysFromArray<T2, K>, UtilsTypes.Unit>) => Types.table<S, r>) => 
+		include: <K extends keyof UtilsTypes.onlyArray<T2>, S, r>(entity: K, q1: (t: Types.table<UtilsTypes.getInnerEntity<T2, K>, UtilsTypes.Unit>) => Types.table<S, r>) => 
 			lazyTable(q.then(Utils.Fun(t => t.include(entity, q1)))),
 		
 		orderby: <K extends keyof R>(order: UtilsTypes.Order, by: K) =>

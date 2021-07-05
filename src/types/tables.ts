@@ -9,7 +9,7 @@ export type table<T, R> = {
     o: T[],
     r: R[],
     select: <K extends keyof T>(...k: K[]) => table<Omit<T, K>, Pick<T, K> & R>,
-    include: <K extends keyof UtilsTypes.onlyArrays<T>, t1, r1>(entity: K, q: (t: table<UtilsTypes.getKeysFromArray<T, K>, UtilsTypes.Unit>) => table<t1, r1>) => table<Omit<T, K>, { K: r1[] } & R>,
+    include: <K extends keyof UtilsTypes.onlyArray<T>, t1, r1>(entity: K, q: (t: table<UtilsTypes.getInnerEntity<T, K>, UtilsTypes.Unit>) => table<t1, r1>) => table<Omit<T, K>, { K: r1[] } & R>,
     orderby: <K extends keyof R>(order: UtilsTypes.Order, by: K) => table<T, R>
 }
 
@@ -23,7 +23,7 @@ R: Result. When apply is used the result will be updated. Utils.Unit will be a d
 export type lazyTable<T1, T2, R> = {
 	q: UtilsTypes.Fun<table<T1, UtilsTypes.Unit>, table<T2, R>>,
     select: <K extends keyof T2>(...k: K[]) => lazyTable<T1, Omit<T2, K>, Pick<T2, K> & R>
-    include: <K extends keyof UtilsTypes.onlyArrays<T2>, t1, r1>(entity: K, q: (t: table<UtilsTypes.getKeysFromArray<T2, K>, UtilsTypes.Unit>) => table<t1, r1>) => lazyTable<T1, Omit<T2, K>, { K: r1[] } & R>
+    include: <K extends keyof UtilsTypes.onlyArray<T2>, t1, r1>(entity: K, q: (t: table<UtilsTypes.getInnerEntity<T2, K>, UtilsTypes.Unit>) => table<t1, r1>) => lazyTable<T1, Omit<T2, K>, { K: r1[] } & R>
     orderby: <K extends keyof R>(order: UtilsTypes.Order, by: K) => lazyTable<T1, T2, R>
     apply: (v: T1[]) => R[]
 }
