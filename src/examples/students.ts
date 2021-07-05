@@ -7,8 +7,11 @@ const StudentOne: Student = {
 	Grades: [{
 		Grade: 9,
 		CourseId: 5
-	}
-	]
+	},
+	{
+		Grade: 8,
+		CourseId: 2
+	}]
 };
 
 const StudentTwo: Student = {
@@ -18,6 +21,10 @@ const StudentTwo: Student = {
 	Grades: [{
 		Grade: 10,
 		CourseId: 6
+	},
+	{
+		Grade: 7,
+		CourseId: 4
 	}]
 };
 
@@ -28,6 +35,10 @@ const StudentThree: Student = {
 	Grades: [{
 		Grade: 7,
 		CourseId: 4
+	},
+	{
+		Grade: 6,
+		CourseId: 1
 	}]
 };
 

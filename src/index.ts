@@ -16,6 +16,6 @@ const orderby = lazyStudentsTable
 	.select('Name', 'StudentNumber').orderby('ASC', 'StudentNumber')
 	.apply(students)
 
-console.log('Select:', select);
-console.log('Include:', include);
-console.log('Orderby:', orderby);
+console.log(JSON.stringify(select, null, 1));
+console.log(JSON.stringify(include, null, 1));
+console.log(JSON.stringify(orderby, null, 1));

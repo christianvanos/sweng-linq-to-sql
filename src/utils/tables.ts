@@ -22,9 +22,14 @@ const table = function<T, R>(object: T[], result: R[]) : Types.table<T, R> {
 			const newObject = object.map(v => Utils.omit<T, K>(selectedFields)(v));
 			
 			// include the new selectedFields into the result and save it into newResult
-			const newResult = object.map((value, index) => {
-				return {...Array.isArray(value) ? value.map((v1) => Utils.pick<T, K>(selectedFields)(v1))[0] : Utils.pick<T, K>(selectedFields)(value), ...result[index]}
-			});
+			const newResult = object.map(value => {
+				return Array.isArray(value) ?
+					value.map((v1) => Utils.pick<T, K>(selectedFields)(v1))
+					:
+					Utils.pick<T, K>(selectedFields)(value);
+			}).map((value, index) => {
+				return { ...value, ...result[index] };
+			}) as unknown as Pick<T, K>[];
 
 			return table<Omit<T, K>, Pick<T, K>>(newObject, newResult);
 		},
@@ -34,9 +39,11 @@ const table = function<T, R>(object: T[], result: R[]) : Types.table<T, R> {
 
 			// runs the query over the entity and combines it with the result to produce the new result
 			// eslint-disable-next-line no-use-before-define
-			const newResult = object.map((_, index) => { return {...result[index], ...{ [entity]: q(createTable(object.map(v => v[entity]))).result[index] } as unknown as {[key in K]: r[]}} });
-
-			return table<Omit<T, K>, R & { [key in K]: r[]}>(newObject, newResult);
+			const newResult = q(createTable(object.map(v => v[entity]))).result.map((value, index) => {
+				return {...result[index], [entity]: Object.values(value)}
+			}) as unknown as ({ [key in K]: r[]; } & R)[]
+			
+			return table<Omit<T, K>, {[key in K]: r[]} & R>(newObject, newResult);
 		},
 		orderby: function<K extends keyof R>(order: ('ASC' | 'DESC'), by: K) : Types.table<T, R> {
 			// No need to create a new object since this function does not work like a filter.
