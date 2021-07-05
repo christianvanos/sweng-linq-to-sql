@@ -9,7 +9,9 @@ export type excludeArray<T> =
 	Pick<T, {[K in keyof T]: T[K] extends object[] ? never : K}[keyof T]>;
 
 export type getKeysFromArray<T, K extends keyof includeArrays<T>> = 
-	T[K] extends Array<infer U> ? U : never;
+	T[K] extends (infer U)[] ? U : never;
+
+export type Order = 'ASC' | 'DESC'
 
 // Fun is used to compose functions to keep the program lazy.
 export type Fun<a, b> = {
@@ -37,28 +39,19 @@ export const pick = <T, K extends keyof T>(keys: K[]): Fun<T, Pick<T, K>> =>
         keys.map(key => key in object ? { [key]: object[key] } : {}).reduce((res, o) => ({ ...res, ...o }), {}) as Pick<T, K>
 	);
 
-export const getKeysFromObject = <T>(object: T): Array<keyof T> => Object.keys(object) as Array<keyof T>
+export const getKeysFromObject = <T>(object: T): (keyof T)[] => Object.keys(object) as (keyof T)[]
 
-export const omit = <T, K extends keyof T>(keys: Array<keyof T>): Fun<T, Omit<T, K>> => 
+export const omit = <T, K extends keyof T>(keys: (keyof T)[]): Fun<T, Omit<T, K>> => 
 	Fun(object =>
         getKeysFromObject(object).map(key => keys.includes(key) ? {} : { [key]: object[key] }).reduce((res, o) => ({ ...res, ...o }), {}) as Omit<T, K>
 	);
 
-export function sortArray<R, K extends keyof R>(order: ('ASC' | 'DESC'), by: K, a: R, b: R) : number {
+export const sortArray = <R, K extends keyof R>(order: Order, a: R[K], b: R[K]): number => {
 	const sortOrder = order === 'ASC' ? 1 : -1;
-	const currentSortA = a[by]
-	const currentSortB = b[by]
+	const res = typeof a === 'string' && typeof b === 'string' ?
+		a.localeCompare(b) 
+		: 
+		a === b ? 0 : a < b ? -1 : 1;
 
-	const res = typeof currentSortA === 'string' && typeof currentSortB === 'string'? 
-		(() => {
-			const itemOne = currentSortA.charAt(0).toUpperCase() + currentSortA.slice(1);
-			const itemTwo = currentSortB.charAt(0).toUpperCase() + currentSortB.slice(1);
-			return itemOne < itemTwo ? -sortOrder : itemOne > itemTwo ? sortOrder : 0;
-		})()
-		:
-		a[by] < b[by] ? -sortOrder : 
-			a[by] > b[by] ?
-				sortOrder : 0;
-
-	return res;
+	return res * sortOrder;
 }
