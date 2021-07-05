@@ -11,8 +11,8 @@ const Table = <T, R>(o: T[], r: R[]) : TableType<T, R> =>
 				o.map(v => Omit<T, K>(v, k)), 
 				o.map((v, i) => 
 					({
-						...Pick<T, K>(v, k), 
-						...r[i]
+						...r[i],
+						...Pick<T, K>(v, k)
 					})
 				)
 			),
@@ -24,7 +24,7 @@ const Table = <T, R>(o: T[], r: R[]) : TableType<T, R> =>
 						...r[i], 
 						[entity]: q(Table(v[entity], [Unit])).r
 					})
-				) as ({ K : r1[]; } & R)[]
+				) as (R & { K : r1[]; })[]
 			),
 		Orderby: <K extends keyof R>(order: Order, by: K) => 
 			Table(
