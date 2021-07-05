@@ -5,7 +5,8 @@
   "main": "src/index.ts",
   "scripts": {
     "prestart": "npm install",
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "dev": "ts-node src/index.ts"
   },
   "repository": {
     "type": "git",
