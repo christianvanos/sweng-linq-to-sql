@@ -29,9 +29,9 @@ const table = function<T, R>(object: T[], result: R[]) : Types.table<T, R> {
 					Utils.pick<T, K>(selectedFields)(value);
 			}).map((value, index) => {
 				return { ...value, ...result[index] };
-			}) as unknown as Pick<T, K>[];
+			}) as (Pick<T, K> & R)[]
 
-			return table<Omit<T, K>, Pick<T, K>>(newObject, newResult);
+			return table<Omit<T, K>, Pick<T, K> & R>(newObject, newResult);
 		},
 		include: function<K extends keyof Utils.includeArrays<T>, S, r>(entity: K, q: (t: Types.table<Utils.getKeysFromArray<T, K>, Utils.Unit>) => Types.table<S, r>) : Types.table<Omit<T, K>, R & { [key in K]: r[]}> {
 			// omits the entity ("Table") from the object
@@ -41,7 +41,7 @@ const table = function<T, R>(object: T[], result: R[]) : Types.table<T, R> {
 			// eslint-disable-next-line no-use-before-define
 			const newResult = q(createTable(object.map(v => v[entity]))).result.map((value, index) => {
 				return {...result[index], [entity]: Object.values(value)}
-			}) as unknown as ({ [key in K]: r[]; } & R)[]
+			}) as ({ [key in K]: r[]; } & R)[]
 			
 			return table<Omit<T, K>, {[key in K]: r[]} & R>(newObject, newResult);
 		},
