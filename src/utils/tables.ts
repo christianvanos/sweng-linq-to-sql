@@ -1,55 +1,55 @@
-import * as Utils from './utils';
-import * as Types from '../types/tables';
-import * as UtilsTypes from '../types/utils';
+import {Fun, Omit, Pick, Unit, SortArray} from './utils';
+import {TableType, LazyTableType} from '../types/tables';
+import {UnitType, FunType, Order, OnlyArray, GetInnerEntity} from '../types/utils';
 
-const table = <T, R>(o: T[], r: R[]) : Types.table<T, R> => 
+const Table = <T, R>(o: T[], r: R[]) : TableType<T, R> => 
 	({
 		o,
 		r,
-		select: <K extends keyof T>(...k: K[]) => 
-			table(
-				o.map(v => Utils.omit<T, K>(v, k)), 
+		Select: <K extends keyof T>(...k: K[]) => 
+			Table(
+				o.map(v => Omit<T, K>(v, k)), 
 				o.map((v, i) => 
 					({
-						...Utils.pick<T, K>(v, k), 
+						...Pick<T, K>(v, k), 
 						...r[i]
 					})
 				)
 			),
-		include: <K extends keyof UtilsTypes.onlyArray<T>, t1, r1>(entity: K, q: (t: Types.table<UtilsTypes.getInnerEntity<T, K>, UtilsTypes.Unit>) => Types.table<t1, r1>) => 
-			table(
-				o.map(v => Utils.omit<T, K>(v, [entity])), 
+		Include: <K extends keyof OnlyArray<T>, t1, r1>(entity: K, q: (t: TableType<GetInnerEntity<T, K>, UnitType>) => TableType<t1, r1>) => 
+			Table(
+				o.map(v => Omit<T, K>(v, [entity])), 
 				o.map((v, i) => 
 					({
 						...r[i], 
-						[entity]: q(table(v[entity], [Utils.Unit])).r
+						[entity]: q(Table(v[entity], [Unit])).r
 					})
 				) as ({ K : r1[]; } & R)[]
 			),
-		orderby: <K extends keyof R>(order: UtilsTypes.Order, by: K) => 
-			table(
+		Orderby: <K extends keyof R>(order: Order, by: K) => 
+			Table(
 				o,
-				r.sort((a, b) => Utils.sortArray<R, K>(order, a[by], b[by]))
+				r.sort((a, b) => SortArray<R, K>(order, a[by], b[by]))
 			)
 	})
 
-const lazyTable = <T1, T2, R>(q: UtilsTypes.Fun<Types.table<T1, UtilsTypes.Unit>, Types.table<T2, R>>) : Types.lazyTable<T1, T2, R> => 
+const LazyTable = <T1, T2, R>(q: FunType<TableType<T1, UnitType>, TableType<T2, R>>) : LazyTableType<T1, T2, R> => 
 	({ 
 		q,
 		
-		select: <K extends keyof T2>(...k: K[]) => 
-			lazyTable(q.then(Utils.Fun(t => t.select(...k)))),
+		Select: <K extends keyof T2>(...k: K[]) => 
+			LazyTable(q.then(Fun(t => t.Select(...k)))),
 		
-		include: <K extends keyof UtilsTypes.onlyArray<T2>, S, r>(entity: K, q1: (t: Types.table<UtilsTypes.getInnerEntity<T2, K>, UtilsTypes.Unit>) => Types.table<S, r>) => 
-			lazyTable(q.then(Utils.Fun(t => t.include(entity, q1)))),
+		Include: <K extends keyof OnlyArray<T2>, S, r>(entity: K, q1: (t: TableType<GetInnerEntity<T2, K>, UnitType>) => TableType<S, r>) => 
+			LazyTable(q.then(Fun(t => t.Include(entity, q1)))),
 		
-		orderby: <K extends keyof R>(order: UtilsTypes.Order, by: K) =>
-			lazyTable(q.then(Utils.Fun(t => t.orderby(order, by)))),
+		Orderby: <K extends keyof R>(order: Order, by: K) =>
+			LazyTable(q.then(Fun(t => t.Orderby(order, by)))),
 		
-		apply: (v) => q(table(v, [Utils.Unit])).r
+		Apply: (v) => q(Table(v, [Unit])).r
 	})
 
 
-export const createLazyTable = <T>() : Types.lazyTable<T, T, UtilsTypes.Unit> => 
-	lazyTable(Utils.Fun(t => t))
+export const CreateLazyTable = <T>() : LazyTableType<T, T, UnitType> => 
+	LazyTable(Fun(t => t))
 

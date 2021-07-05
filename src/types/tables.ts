@@ -1,29 +1,17 @@
-import * as UtilsTypes from '../types/utils';
+import {Order, FunType, UnitType, OnlyArray, GetInnerEntity} from '../types/utils';
 
-/*
-T: The generic type for the object
-R: The generic type for the result
-*/
-
-export type table<T, R> = {
+export type TableType<T, R> = {
     o: T[],
     r: R[],
-    select: <K extends keyof T>(...k: K[]) => table<Omit<T, K>, Pick<T, K> & R>,
-    include: <K extends keyof UtilsTypes.onlyArray<T>, t1, r1>(entity: K, q: (t: table<UtilsTypes.getInnerEntity<T, K>, UtilsTypes.Unit>) => table<t1, r1>) => table<Omit<T, K>, { K: r1[] } & R>,
-    orderby: <K extends keyof R>(order: UtilsTypes.Order, by: K) => table<T, R>
+    Select: <K extends keyof T>(...k: K[]) => TableType<Omit<T, K>, Pick<T, K> & R>,
+    Include: <K extends keyof OnlyArray<T>, t1, r1>(entity: K, q: (t: TableType<GetInnerEntity<T, K>, UnitType>) => TableType<t1, r1>) => TableType<Omit<T, K>, { K: r1[] } & R>,
+    Orderby: <K extends keyof R>(order: Order, by: K) => TableType<T, R>
 }
 
-/*
-T1: Starting object. This object will remain the same all the time. This is only used in apply to give it to the table.
-T2: Current object. When functions have been called, the object is composed with another table. This way we keep the program lazy.
-R: Result. When apply is used the result will be updated. Utils.Unit will be a default (an empty object) because there is no result
-            apply has not been called yet due to the lazy structure of the program.
-*/
-
-export type lazyTable<T1, T2, R> = {
-	q: UtilsTypes.Fun<table<T1, UtilsTypes.Unit>, table<T2, R>>,
-    select: <K extends keyof T2>(...k: K[]) => lazyTable<T1, Omit<T2, K>, Pick<T2, K> & R>
-    include: <K extends keyof UtilsTypes.onlyArray<T2>, t1, r1>(entity: K, q: (t: table<UtilsTypes.getInnerEntity<T2, K>, UtilsTypes.Unit>) => table<t1, r1>) => lazyTable<T1, Omit<T2, K>, { K: r1[] } & R>
-    orderby: <K extends keyof R>(order: UtilsTypes.Order, by: K) => lazyTable<T1, T2, R>
-    apply: (v: T1[]) => R[]
+export type LazyTableType<T1, T2, R> = {
+	q: FunType<TableType<T1, UnitType>, TableType<T2, R>>,
+    Select: <K extends keyof T2>(...k: K[]) => LazyTableType<T1, Omit<T2, K>, Pick<T2, K> & R>
+    Include: <K extends keyof OnlyArray<T2>, t1, r1>(entity: K, q: (t: TableType<GetInnerEntity<T2, K>, UnitType>) => TableType<t1, r1>) => LazyTableType<T1, Omit<T2, K>, { K: r1[] } & R>
+    Orderby: <K extends keyof R>(order: Order, by: K) => LazyTableType<T1, T2, R>
+    Apply: (v: T1[]) => R[]
 }

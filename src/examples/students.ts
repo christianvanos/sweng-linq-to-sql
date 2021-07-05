@@ -1,6 +1,6 @@
 import { Student } from '../types/models';
 
-export const students: Student[] = [
+export const Students: Student[] = [
 	{
 		Name: 'Christian',
 		StudentNumber: 964032,

@@ -1,21 +1,21 @@
-import { createLazyTable } from './utils/tables';
+import { CreateLazyTable } from './utils/tables';
 import { Student } from './types/models'
-import { students } from './examples/students'
+import { Students } from './examples/students'
 
-const lazyStudentsTable = createLazyTable<Student>();
+const LazyStudentsTable = CreateLazyTable<Student>();
 
-const select = lazyStudentsTable
-	.select('Name').apply(students)
+const Select = LazyStudentsTable
+	.Select('Name').Apply(Students)
 
-const include = lazyStudentsTable
-	.select('Name').select('StudentNumber', 'Surname')
-	.include('Grades', t => t.select('CourseId'))
-	.apply(students)
+const Include = LazyStudentsTable
+	.Select('Name').Select('StudentNumber', 'Surname')
+	.Include('Grades', t => t.Select('CourseId'))
+	.Apply(Students)
 
-const orderby = lazyStudentsTable
-	.select('Name', 'StudentNumber').orderby('ASC', 'StudentNumber')
-	.apply(students)
+const Orderby = LazyStudentsTable
+	.Select('Name', 'StudentNumber').Orderby('ASC', 'StudentNumber')
+	.Apply(Students)
 
-console.log('select: ' + JSON.stringify(select, null, 1));
-console.log('include: ' + JSON.stringify(include, null, 1));
-console.log('orderby: ' + JSON.stringify(orderby, null, 1));
+console.log('Select: ' + JSON.stringify(Select, null, 1));
+console.log('Include: ' + JSON.stringify(Include, null, 1));
+console.log('Orderby: ' + JSON.stringify(Orderby, null, 1));
