@@ -46,7 +46,7 @@ const LazyTable = <T1, T2, R>(q: FunType<TableType<T1, UnitType>, TableType<T2, 
 		Orderby: <K extends keyof R>(order: Order, by: K) =>
 			LazyTable(q.then(Fun(t => t.Orderby(order, by)))),
 		
-		Apply: (v) => q(Table(v, [Unit])).r
+		Apply: v => q(Table(v, [Unit])).r
 	})
 
 
