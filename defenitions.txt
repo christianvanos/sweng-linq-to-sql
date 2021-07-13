@@ -65,7 +65,7 @@ interfaces allowed us to build up new types from other types by extending them. 
 ----------------------------------------------------------------
 
 ----------------------------------------------------------------
-getKeysFromArray<T, K extends keyof includeArrays<T>> = T[K] extends (infer U)[] ? U : never;
+InnerArray<T, K extends keyof includeArray<T>> = T[K] extends (infer U)[] ? U : never;
 	T = Student = {
     	Name: string,
     	Surname: string,
@@ -79,3 +79,9 @@ getKeysFromArray<T, K extends keyof includeArrays<T>> = T[K] extends (infer U)[]
 		CourseId: number;
 	}
 ----------------------------------------------------------------
+
+Record<string, never> = {
+    [P in string]: never;
+}
+	=> {}
+	empty object
