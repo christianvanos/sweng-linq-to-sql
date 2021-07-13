@@ -16,6 +16,6 @@ const Orderby = LazyStudentsTable
 	.Select('Name', 'StudentNumber').Orderby('ASC', 'StudentNumber')
 	.Apply(Students)
 
-console.log('Select: ' + JSON.stringify(Select, null, 1));
-console.log('Include: ' + JSON.stringify(Include, null, 1));
-console.log('Orderby: ' + JSON.stringify(Orderby, null, 1));
+console.log(`Select: ${JSON.stringify(Select, null, 1)}`);
+console.log(`Include: ${JSON.stringify(Include, null, 1)}`);
+console.log(`Orderby: ${JSON.stringify(Orderby, null, 1)}`);
