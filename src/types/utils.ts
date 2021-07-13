@@ -11,13 +11,13 @@ export interface iFun<a, b> {
 export type iOrder = 'ASC' | 'DESC'
 
 /** The IncludeArray has as input an object. It will return the object with only the arrays inside */
-export type IncludeArray<T> = 
+export type IncludeArray<T> =
 	Pick<T, {[K in keyof T]: T[K] extends unknown[] ? K : never}[keyof T]>;
 
 /** The ExcludeArray does exactly the opposite of IncludeArray */
-export type ExcludeArray<T> = 
+export type ExcludeArray<T> =
 	Pick<T, {[K in keyof T]: T[K] extends unknown[] ? never : K}[keyof T]>;
 
 /** Will return the InnerArray inside a object */
-export type InnerArray<T, K extends keyof IncludeArray<T>> = 
+export type InnerArray<T, K extends keyof IncludeArray<T>> =
 	T[K] extends (infer U)[] ? U : never;

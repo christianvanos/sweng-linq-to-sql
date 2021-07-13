@@ -21,7 +21,7 @@ const Table = <T, R>(o: T[], r: R[]) : iTable<T, R> =>
 				o.map(o1 => Omit(o1, [entity])),
 				o.map((o1, i) =>
 					({
-						...r[i], 
+						...r[i],
 						[entity]: query(Table(o1[entity], [Empty])).r
 					})
 				)
@@ -34,13 +34,13 @@ const Table = <T, R>(o: T[], r: R[]) : iTable<T, R> =>
 	})
 
 const LazyTable = <T1, T2, R>(q: iFun<iTable<T1, iEmpty>, iTable<T2, R>>) : iLazyTable<T1, T2, R> =>
-	({ 
+	({
 		q,
-		Select: (...keys) => 
+		Select: (...keys) =>
 			LazyTable(q.then(Fun(t => t.Select(...keys)))),
-		Include: (entity, query) => 
+		Include: (entity, query) =>
 			LazyTable(q.then(Fun(t => t.Include(entity, query)))),
-		Orderby: (order, by) => 
+		Orderby: (order, by) =>
 			LazyTable(q.then(Fun(t => t.Orderby(order, by)))),
 		Apply: v => JSON.stringify(q(Table(v, [Empty])).r, null, 1)
 	})

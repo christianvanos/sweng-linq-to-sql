@@ -1,14 +1,14 @@
 import {iFun, iOrder, iEmpty, IncludeArray, InnerArray} from '../types/utils';
 
 /**
- * Interface for the Table 
+ * Interface for the Table
  * @param o is the working object array of generic type T
  * @param r is the resulting object array of generic type R
  */
 export interface iTable<T, R> {
     o: T[]
     r: R[]
-    /** 
+    /**
      * Interface for the Select method
      * @type K type is a union of the selected keys of T
      * @param keys is an array of the selected keys

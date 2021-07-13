@@ -6,6 +6,7 @@
   "scripts": {
     "prestart": "npm install",
     "start": "ts-node src/index.ts",
+    "lint": "eslint . --ext .ts",
     "dev": "ts-node src/index.ts"
   },
   "repository": {

@@ -48,6 +48,7 @@ module.exports = {
 		'no-self-compare': 'error',
 		'no-sequences': 'error',
 		'no-throw-literal': 'warn',
+		'no-trailing-spaces': 'warn',
 		'no-unmodified-loop-condition': 'error',
 		'no-unused-expressions': 'error',
 		'no-useless-call': 'warn',
