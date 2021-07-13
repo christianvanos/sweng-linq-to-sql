@@ -1,55 +1,49 @@
-import {Fun, Omit, Pick, Unit, SortArray} from './utils';
-import {TableType, LazyTableType} from '../types/tables';
-import {UnitType, FunType, Order, OnlyArray, GetInnerEntity} from '../types/utils';
+import {iFun, iEmpty} from '../types/utils';
+import {iTable, iLazyTable} from '../types/tables';
+import {Fun, Omit, Pick, Empty, SortArray} from './utils';
 
-const Table = <T, R>(o: T[], r: R[]) : TableType<T, R> => 
+const Table = <T, R>(o: T[], r: R[]) : iTable<T, R> =>
 	({
 		o,
 		r,
-		Select: <K extends keyof T>(...k: K[]) => 
+		Select: (...keys) =>
 			Table(
-				o.map(v => Omit<T, K>(v, k)), 
-				o.map((v, i) => 
+				o.map(o1 => Omit(o1, keys)),
+				o.map((o1, i) =>
 					({
 						...r[i],
-						...Pick<T, K>(v, k)
+						...Pick(o1, keys)
 					})
 				)
 			),
-		Include: <K extends keyof OnlyArray<T>, t1, r1>(entity: K, q: (t: TableType<GetInnerEntity<T, K>, UnitType>) => TableType<t1, r1>) => 
+		Include: (entity, query) =>
 			Table(
-				o.map(v => Omit<T, K>(v, [entity])), 
-				o.map((v, i) => 
+				o.map(o1 => Omit(o1, [entity])),
+				o.map((o1, i) =>
 					({
 						...r[i], 
-						[entity]: q(Table(v[entity], [Unit])).r
+						[entity]: query(Table(o1[entity], [Empty])).r
 					})
-				) as (R & { K : r1[]; })[]
+				)
 			),
-		Orderby: <K extends keyof R>(order: Order, by: K) => 
+		Orderby: (order, by) =>
 			Table(
 				o,
-				r.sort((a, b) => SortArray<R, K>(order, a[by], b[by]))
+				r.sort((a, b) => SortArray(order, a[by], b[by]))
 			)
 	})
 
-const LazyTable = <T1, T2, R>(q: FunType<TableType<T1, UnitType>, TableType<T2, R>>) : LazyTableType<T1, T2, R> => 
+const LazyTable = <T1, T2, R>(q: iFun<iTable<T1, iEmpty>, iTable<T2, R>>) : iLazyTable<T1, T2, R> =>
 	({ 
 		q,
-		
-		Select: <K extends keyof T2>(...k: K[]) => 
-			LazyTable(q.then(Fun(t => t.Select(...k)))),
-		
-		Include: <K extends keyof OnlyArray<T2>, S, r>(entity: K, q1: (t: TableType<GetInnerEntity<T2, K>, UnitType>) => TableType<S, r>) => 
-			LazyTable(q.then(Fun(t => t.Include(entity, q1)))),
-		
-		Orderby: <K extends keyof R>(order: Order, by: K) =>
+		Select: (...keys) => 
+			LazyTable(q.then(Fun(t => t.Select(...keys)))),
+		Include: (entity, query) => 
+			LazyTable(q.then(Fun(t => t.Include(entity, query)))),
+		Orderby: (order, by) => 
 			LazyTable(q.then(Fun(t => t.Orderby(order, by)))),
-		
-		Apply: v => q(Table(v, [Unit])).r
+		Apply: v => JSON.stringify(q(Table(v, [Empty])).r, null, 1)
 	})
 
-
-export const CreateLazyTable = <T>() : LazyTableType<T, T, UnitType> => 
+export const CreateLazyTable = <T>() : iLazyTable<T, T, iEmpty> =>
 	LazyTable(Fun(t => t))
-

@@ -1,6 +1,15 @@
-import { Student } from '../types/models';
+interface iGrades {
+    Grade: number
+    CourseId: number
+}
+export interface iStudent {
+    Name: string
+    Surname: string
+    Grades: iGrades[]
+    StudentNumber: number
+}
 
-export const Students: Student[] = [
+export const Students: iStudent[] = [
 	{
 		Name: 'Christian',
 		StudentNumber: 964032,
