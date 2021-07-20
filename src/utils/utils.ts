@@ -16,11 +16,12 @@ export const Fun = <a, b>(f:(_:a) => b) : iFun<a, b> => {
 export const Pick = <T, K extends keyof T>(o: T, k: K[]): Pick<T, K> =>
 	k.reduce((acc, k1) => ({[k1]: o[k1], ...acc}), {} as T)
 
-/** The Omit function removes the keys (k) of the object (o) and returns the new object without these keys */
-export const Omit = <T, K extends keyof T>({...o}: T, k: K[]): Omit<T, K> => {
-	k.forEach(k1 => delete o[k1])
-	return o;
-}
+/** The OmitMany function removes the keys (k) of the objects (o1) in the array of objects (o) and returns the new array of objects without these keys */
+export const OmitMany = <T, K extends keyof T>(o: T[], k: K[]): Omit<T, K>[] =>
+	o.map(({...o1}) => {
+		k.forEach(k1 => delete o1[k1])
+		return o1;
+	})
 
 /** The SortArray function sorts the values given by Array.sort and uses the order to reverse the result if needed */
 export const SortArray = <R, K extends keyof R>(order: iOrder, a: R[K], b: R[K]): number =>

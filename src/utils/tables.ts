@@ -1,6 +1,6 @@
 import {iFun, iEmpty} from '../types/utils';
 import {iTable, iLazyTable} from '../types/tables';
-import {Fun, Omit, Pick, Empty, SortArray} from './utils';
+import {Fun, OmitMany, Pick, Empty, SortArray} from './utils';
 
 const Table = <T, R>(o: T[], r: R[]) : iTable<T, R> =>
 	({
@@ -8,7 +8,7 @@ const Table = <T, R>(o: T[], r: R[]) : iTable<T, R> =>
 		r,
 		Select: (...keys) =>
 			Table(
-				o.map(o1 => Omit(o1, keys)),
+				OmitMany(o, keys),
 				o.map((o1, i) =>
 					({
 						...r[i],
@@ -18,7 +18,7 @@ const Table = <T, R>(o: T[], r: R[]) : iTable<T, R> =>
 			),
 		Include: (entity, query) =>
 			Table(
-				o.map(o1 => Omit(o1, [entity])),
+				OmitMany(o, [entity]),
 				o.map((o1, i) =>
 					({
 						...r[i],
