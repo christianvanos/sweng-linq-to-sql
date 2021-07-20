@@ -26,10 +26,10 @@ const Table = <T, R>(o: T[], r: R[]) : iTable<T, R> =>
 					})
 				)
 			),
-		Orderby: (order, by) =>
+		Orderby: (order, key) =>
 			Table(
 				o,
-				r.sort((a, b) => SortArray(order, a[by], b[by]))
+				[...r].sort((a, b) => SortArray(order, a[key], b[key]))
 			)
 	})
 
