@@ -29,10 +29,10 @@ export interface iTable<T, R> {
      * Interface for the OrderBy method
      * @type K is the selected key that is in the result object as string
      * @param order is the order which is it will be sorted in ('ASC' | 'DESC')
-     * @param by is the selected key we will do the sorting with
+     * @param key is the selected key we will do the sorting with
      * @return a new Table with the sorted result
      */
-    Orderby: <K extends keyof R>(order: iOrder, by: K) => iTable<T, R>
+    Orderby: <K extends keyof R>(key: K, order: iOrder) => iTable<T, R>
 }
 
 /**
@@ -43,6 +43,6 @@ export interface iLazyTable<T1, T2, R> {
 	q: iFun<iTable<T1, iEmpty>, iTable<T2, R>>
     Select: <K extends keyof T2>(...keys: K[]) => iLazyTable<T1, Omit<T2, K>, R & Pick<T2, K>>
     Include: <K extends keyof IncludeArray<T2>, t1, r1>(entity: K, query: (t: iTable<InnerArray<T2, K>, iEmpty>) => iTable<t1, r1>) => iLazyTable<T1, Omit<T2, K>, R & { [entity: string]: r1[] }>
-    Orderby: <K extends keyof R>(order: iOrder, by: K) => iLazyTable<T1, T2, R>
+    Orderby: <K extends keyof R>(key: K, order: iOrder) => iLazyTable<T1, T2, R>
     Apply: (v: T1[]) => string
 }

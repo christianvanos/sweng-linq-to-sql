@@ -15,7 +15,7 @@ const Include = LazyStudentsTable
 
 const Orderby = LazyStudentsTable
 	.Select('Name', 'StudentNumber')
-	.Orderby('ASC', 'StudentNumber')
+	.Orderby('StudentNumber', 'ASC')
 	.Apply(Students)
 
 console.log(`Select: ${Select}`);
