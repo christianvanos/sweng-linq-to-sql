@@ -1,4 +1,10 @@
-/** The iEmpty type represent an empty object */
+/** The iEmpty type represent an empty object
+ *  Record<string, never> = {
+ *  	[P in string]: never;
+ * 	}
+ * 	    => {}
+ * 		this is an empty object
+*/
 export type iEmpty = Record<string, never>
 
 /** The iFun is the interface of the Fun function (lazy evaluation) */
@@ -14,6 +20,18 @@ export type iOrder = 'ASC' | 'DESC'
 export type IncludeArray<T> =
 	Pick<T, {[K in keyof T]: T[K] extends unknown[] ? K : never}[keyof T]>;
 
-/** Will return the InnerArray inside a object */
+/** Will return the InnerArray inside a object
+ * 	T = Student = {
+ * 		Name: string,
+ * 		Surname: string,
+ * 		Grades: Grades[],
+ * 		StudentNumber: number
+ * 	}
+ * 	K = 'Grades'
+ * 	=> T[K] = U = {
+ * 		Grade: number;
+ * 		CourseId: number;
+ * 	}
+*/
 export type InnerArray<T, K extends keyof IncludeArray<T>> =
 	T[K] extends (infer U)[] ? U : never;

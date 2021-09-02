@@ -63,25 +63,3 @@ interfaces allowed us to build up new types from other types by extending them. 
 		Length: number
 	}
 ----------------------------------------------------------------
-
-----------------------------------------------------------------
-InnerArray<T, K extends keyof includeArray<T>> = T[K] extends (infer U)[] ? U : never;
-	T = Student = {
-    	Name: string,
-    	Surname: string,
-    	Grades: Grades[],
-    	StudentNumber: number
-	}
-	K = 'Grades' 
-
-	=> T[K] = U = {
-		Grade: number;
-		CourseId: number;
-	}
-----------------------------------------------------------------
-
-Record<string, never> = {
-    [P in string]: never;
-}
-	=> {}
-	empty object
