@@ -1,7 +1,7 @@
 import {iFun, iOrder, iEmpty} from '../types/utils';
 
 /** The Empty variable represents an empty object */
-export const Empty : iEmpty = {}
+export const Empty : iEmpty[] = [{}]
 
 /** The Fun function makes it possible to have lazy evaluation and chains of Fun */
 export const Fun = <a, b>(f:(_:a) => b) : iFun<a, b> => {
