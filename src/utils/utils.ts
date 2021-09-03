@@ -23,6 +23,10 @@ export const OmitMany = <T, K extends keyof T>(o: T[], k: K[]): Omit<T, K>[] =>
 		return o1;
 	})
 
-/** The SortArray function sorts the values given by Array.sort and uses the order to reverse the result if needed */
+/** The SortArray function sorts the values given by Array.sort and uses the order to reverse the result if needed
+ * If (a, b) returns a value > than 0, sort b before a.
+ * If (a, b) returns a value < than 0, sort a before b.
+ * If (a, b) returns 0, a and b are considered equal.
+ */
 export const SortArray = <R, K extends keyof R>(order: iOrder, a: R[K], b: R[K]): number =>
 	(a < b ? -1 : 1) * (order === 'ASC' ? 1 : -1)
